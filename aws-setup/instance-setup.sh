@@ -1,3 +1,3 @@
 #! /bin/sh
 
-curl "http://ipcalf.com/?nvw-test-auto1"
+curl "http://ipcalf.com/?nvw-test-auto2"

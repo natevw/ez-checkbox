@@ -32,7 +32,7 @@ variable "instance_type" {
   default = "t4g.nano"
 }
 
-data "aws_ami" "debian" {
+data "aws_ami" "base_os" {
   # see https://wiki.debian.org/Cloud/AmazonEC2Image/Trixie
   filter {
     name = "name"
@@ -40,4 +40,11 @@ data "aws_ami" "debian" {
   }
   owners = ["136693071363"]
   most_recent = true
+}
+
+locals {
+  # ~HACK: afaict this is *not* part of AMI/instance metadata.
+  # see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managing-users.html#ami-default-user-names
+  # via https://stackoverflow.com/questions/20779454/how-to-find-the-username-of-the-instance-launched-in-amazon-ec2/67171575#67171575
+  ami_login_user = "admin"
 }
