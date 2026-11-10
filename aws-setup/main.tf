@@ -3,6 +3,10 @@ resource "aws_key_pair" "deployer" {
   public_key = data.local_file.ssh_key.content
 }
 
+data "local_file" "setup_script" {
+  filename = "instance-setup.sh"
+}
+
 resource "aws_instance" "proxy_server" {
   ami           = data.aws_ami.debian.id
   key_name      = aws_key_pair.deployer.key_name
@@ -13,6 +17,8 @@ resource "aws_instance" "proxy_server" {
   
   vpc_security_group_ids = [aws_security_group.sysadmin.id, aws_security_group.dns_host.id]
   availability_zone = var.aws_availzone
+  
+  user_data = data.local_file.setup_script.content
   
   tags = {
     Name = "${ var.deploy_prefix }box"

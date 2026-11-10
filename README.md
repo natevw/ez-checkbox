@@ -25,4 +25,8 @@ Refs:
 * https://github.com/hashicorp-education/learn-terraform-provisioning/tree/cloudinit
   * via https://developer.hashicorp.com/terraform/tutorials/provision/cloud-init
 * https://www.sammeechward.com/cloud-init-and-terraform-with-aws#code
-
+* https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html
+  * via https://stackoverflow.com/questions/47614905/how-can-i-add-linux-bash-script-file-into-terraform-code/47624273#47624273
+* https://serverfault.com/questions/1085968/run-a-script-via-cloud-init
+* https://developer.hashicorp.com/terraform/language/provisioners#add-a-provisioner-to-your-resource
+  * via https://stackoverflow.com/questions/62101009/terraform-copy-upload-files-to-aws-ec2-instance/62101890#62101890
