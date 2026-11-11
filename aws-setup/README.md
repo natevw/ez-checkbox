@@ -22,10 +22,11 @@ terraform init
 terraform apply
 
 
+SAMPLE_HOST=example.com
 PROXY_BOX=$(terraform output -raw host_ip)
-host -p 5353 ipcalf.com $PROXY_BOX
-curl ${PROXY_BOX}:8080
-curl -k https://${PROXY_BOX}:8080
+host -p 5353 $SAMPLE_HOST $PROXY_BOX
+curl -H "Host: ${SAMPLE_HOST}" ${PROXY_BOX}:8080
+curl -H "Host: ${SAMPLE_HOST}" -k "https://${PROXY_BOX}:8080"
 
 ssh -nNL 8081:localhost:8081 admin@${PROXY_BOX}
 open "http://localhost:8081/?token=4"
