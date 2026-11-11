@@ -25,18 +25,35 @@ resource "aws_instance" "proxy_server" {
     #agent_identity = replace(data.local_file.ssh_key.filename, "/.pub$/", "")
   }
   
+  provisioner "file" {
+    source = "../custom-dns.py"
+    destination = "tmp1"
+  }
+  provisioner "file" {
+    source = "../compose.yml"
+    destination = "tmp2"
+  }
+  
+  # HT: https://github.com/hashicorp/terraform/issues/17441#issuecomment-1638877975
+  provisioner "file" {
+    source = "./instance-setup.sh"
+    destination = "tmp-script"
+  }
   provisioner "remote-exec" {
-    script = templatefile("instance-setup.sh.tftpl", {
-      upstream_host = var.upstream_host
-      public_ip = self.public_ip
-      compose_file = file("../compose.yml")
-      dns_script = file("../custom-dns.py")
-    })
+    inline = [
+      "chmod +x tmp-script",
+      "%{for k, v in {
+        dns_script = "tmp1"
+        compose_file = "tmp2"
+        upstream_host = var.upstream_host
+        public_ip = self.public_ip
+      }} ${k}=\"${v}\" %{endfor} sudo -E ./tmp-script",
+      "rm tmp-script",
+    ]
   }
 }
 
 output "ssh_user" {
-  
   description = "Proxy host SSH user"
   value = local.ami_login_user
 }

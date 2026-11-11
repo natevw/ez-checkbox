@@ -1,5 +1,12 @@
 #! /bin/bash
 
+: ${app_dir:=/srv/proxy}
+: ${dns_script:?}
+: ${compose_file:?}
+: ${upstream_host:?}
+: ${public_ip:?}
+: ${webui_pwd:=4}
+
 apt update
 
 # Debian ~discontinued their `mitmproxy` package;
@@ -9,20 +16,14 @@ apt install -y podman podman-compose
 # HT: https://unix.stackexchange.com/questions/795036/in-podman-how-to-disable-executing-external-compose-provider-message-when-usi#comment1527343_795038
 export PODMAN_COMPOSE_WARNING_LOGS=false
 
-APP_DIR=/srv/proxy
-mkdir -p "$APP_DIR" "$${APP_DIR}/data"
-cat << 'EOF' > "$${APP_DIR}/data/custom-dns.py"
-${dns_script}
-EOF
-cat << 'EOF' > "$${APP_DIR}/compose.yml"
-${compose_file}
-EOF
-cat << 'EOF' > "$${APP_DIR}/.env"
+mkdir -p "$app_dir" "${app_dir}/data"
+mv "$dns_script" "${app_dir}/data/custom-dns.py"
+mv "$compose_file" "${app_dir}/compose.yml"
+cat << EOF > "${app_dir}/.env"
 tgtDomain=${upstream_host}
 proxyIp=${public_ip}
-webuiPw=4
+webuiPw=${webui_pwd}
 EOF
 
-
-cd "$APP_DIR"
+cd "$app_dir"
 podman compose up -d
