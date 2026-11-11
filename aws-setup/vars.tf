@@ -4,11 +4,17 @@ variable "deploy_prefix" {
   default = "ezcb_"
 }
 
-variable "allowed_ips" {
+variable "allowed_clients" {
   type = list(string)
   description = "IP addresses allowed to use the DNS (in CIDR form)"
   default = ["0.0.0.0/32"]
 }
+
+variable "upstream_host" {
+  type = string
+  description = "Host which clients will connect to through us"
+}
+
 
 data "local_file" "ssh_key" {
   filename = "bootstrap-key.pub"

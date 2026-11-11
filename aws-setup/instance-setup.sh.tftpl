@@ -1,0 +1,28 @@
+#! /bin/bash
+
+apt update
+
+# Debian ~discontinued their `mitmproxy` package;
+# it's ± easiest to use official container image.
+apt install -y podman podman-compose
+
+# HT: https://unix.stackexchange.com/questions/795036/in-podman-how-to-disable-executing-external-compose-provider-message-when-usi#comment1527343_795038
+export PODMAN_COMPOSE_WARNING_LOGS=false
+
+APP_DIR=/srv/proxy
+mkdir -p "$APP_DIR" "$${APP_DIR}/data"
+cat << 'EOF' > "$${APP_DIR}/data/custom-dns.py"
+${dns_script}
+EOF
+cat << 'EOF' > "$${APP_DIR}/compose.yml"
+${compose_file}
+EOF
+cat << 'EOF' > "$${APP_DIR}/.env"
+tgtDomain=${upstream_host}
+proxyIp=${public_ip}
+webuiPw=4
+EOF
+
+
+cd "$APP_DIR"
+podman compose up -d

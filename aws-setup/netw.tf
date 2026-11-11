@@ -35,7 +35,7 @@ resource "aws_security_group" "dns_host" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "dns_host_access" {
-  for_each = toset(var.allowed_ips)
+  for_each = toset(var.allowed_clients)
   cidr_ipv4 = each.value
   
   security_group_id = aws_security_group.dns_host.id

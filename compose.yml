@@ -1,0 +1,24 @@
+name: mitm
+services:
+  proxy:
+    image: docker.io/mitmproxy/mitmproxy
+    restart: unless-stopped
+    ports:
+      - "5353:53/udp"
+      - "8080:80/tcp"
+      - "127.0.0.1:8081:8081"
+    volumes:
+      - ./data:/home/mitmproxy/.mitmproxy
+    environment:
+      MITM_DOMAIN: "$tgtDomain"
+      MITM_TARGET: "$proxyIp"
+    tty: true  # ~WORKAROUND: doesn't seem to log without this…?
+    command: >
+      mitmweb
+      --no-web-open-browser
+      --web-host 0.0.0.0
+      --web-port 8081
+      --set web_password="${webuiPw}"
+      -s /home/mitmproxy/.mitmproxy/custom-dns.py
+      --mode reverse:"https://${tgtDomain}@80"
+      --mode dns

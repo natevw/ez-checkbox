@@ -26,7 +26,12 @@ resource "aws_instance" "proxy_server" {
   }
   
   provisioner "remote-exec" {
-    script = "instance-setup.sh"
+    script = templatefile("instance-setup.sh.tftpl", {
+      upstream_host = var.upstream_host
+      public_ip = self.public_ip
+      compose_file = file("../compose.yml")
+      dns_script = file("../custom-dns.py")
+    })
   }
 }
 
