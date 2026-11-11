@@ -1,5 +1,6 @@
 #! /bin/bash
 
+: ${app_user:=admin}
 : ${app_dir:=/srv/proxy}
 : ${dns_script:?}
 : ${compose_file:?}
@@ -26,4 +27,4 @@ webuiPw=${webui_pwd}
 EOF
 
 cd "$app_dir"
-podman compose up -d
+sudo -u "$app_user" podman compose up -d
