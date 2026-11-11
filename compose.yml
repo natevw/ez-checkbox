@@ -3,6 +3,7 @@ services:
   proxy:
     image: docker.io/mitmproxy/mitmproxy
     restart: unless-stopped
+    network_mode: pasta  # HT: https://stackoverflow.com/a/80009191/179583
     ports:
       - "5353:5353/udp"
       - "8080:8080/tcp"

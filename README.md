@@ -19,11 +19,14 @@ TODO:
 - [x] make sure only known client [no open DNS resolver!!]
 - [x] ~~cloud-init~~provisioners for kickoff
 - [x] privileged 53/80/443 port mapping
-- [ ] avoid client 10.89.0.2 address
+- [x] avoid client 10.89.0.2 address
 
 
 Refs:
 
+* https://github.com/containers/podman-compose/blob/main/docs/Extensions.md#podman-specific-network-modes
+* https://github.com/eriksjolund/podman-networking-docs#source-address-preserved
+* https://docs.podman.io/en/v5.4.2/markdown/podman-network.1.html
 * https://stackoverflow.com/questions/75427655/how-to-podman-rootless-expose-containers-ports-to-the-outside-and-see-real-clie
   * via https://old.reddit.com/r/podman/comments/14lls6v/same_ip_address_for_all_incoming_connections_in/jpyei29/
 * https://oneuptime.com/blog/post/2026-03-18-bind-privileged-ports-rootless-podman/view#method-3-use-port-forwarding-with-iptables
