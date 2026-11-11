@@ -11,7 +11,11 @@ resource "aws_instance" "proxy_server" {
     http_tokens = "required"
   }
   
-  vpc_security_group_ids = [aws_security_group.sysadmin.id, aws_security_group.dns_host.id]
+  vpc_security_group_ids = [
+    aws_security_group.sysadmin.id,
+    aws_security_group.nameserver_usage.id,
+    aws_security_group.proxy_usage.id,
+  ]
   availability_zone = var.aws_availzone
   
   tags = {
