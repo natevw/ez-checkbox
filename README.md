@@ -24,6 +24,8 @@ TODO:
 
 Refs:
 
+* https://stackoverflow.com/questions/75427655/how-to-podman-rootless-expose-containers-ports-to-the-outside-and-see-real-clie
+  * via https://old.reddit.com/r/podman/comments/14lls6v/same_ip_address_for_all_incoming_connections_in/jpyei29/
 * https://oneuptime.com/blog/post/2026-03-18-bind-privileged-ports-rootless-podman/view#method-3-use-port-forwarding-with-iptables
 * https://github.com/hashicorp-education/learn-terraform-provisioning/tree/cloudinit
   * via https://developer.hashicorp.com/terraform/tutorials/provision/cloud-init
