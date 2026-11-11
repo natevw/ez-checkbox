@@ -28,4 +28,5 @@ EOF
 
 cd "$app_dir"
 chown -R "${app_user}:${app_user}" .
+loginctl enable-linger "$app_user"
 sudo -u "$app_user" podman compose up -d
