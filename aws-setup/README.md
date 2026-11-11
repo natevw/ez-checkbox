@@ -11,6 +11,7 @@ And then:
 
 ```
 aws configure sso --profile default
+ssh-add # for provisioner connection
 
 cat << EOF > terraform.tfvars
 allowed_clients = ["$(curl ipcalf.com)/32"]
