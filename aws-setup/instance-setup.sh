@@ -25,6 +25,8 @@ DNS_REDIR_DOMAINS=${domains_limited_to}
 DNS_PASSTHROUGH_DOMAINS=${domains_except_for}
 EOF
 
+# iptables -t nat -S
+# nft list table nat
 # HT: https://askubuntu.com/questions/444729/redirect-port-80-to-8080-and-make-it-work-on-local-machine/1119096#1119096
 iptables -A PREROUTING -t nat -i $net_if -p tcp --dport 443 -j REDIRECT --to-port 8080
 iptables -A PREROUTING -t nat -i $net_if -p tcp --dport 80 -j REDIRECT --to-port 8080
