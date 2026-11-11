@@ -6,6 +6,7 @@
 : ${compose_file:?}
 
 : ${public_ip:?}
+: ${net_if:=ens5}
 : ${domains_limited_to:=}
 : ${domains_except_for:=}
 
@@ -26,6 +27,13 @@ DNS_REDIR_DEST=${public_ip}
 DNS_REDIR_DOMAINS=${domains_limited_to}
 DNS_PASSTHROUGH_DOMAINS=${domains_except_for}
 EOF
+
+# HT: https://askubuntu.com/questions/444729/redirect-port-80-to-8080-and-make-it-work-on-local-machine/1119096#1119096
+iptables -A PREROUTING -t nat -i $net_if -p tcp --dport 443 -j REDIRECT --to-port 8080
+iptables -A PREROUTING -t nat -i $net_if -p tcp --dport 80 -j REDIRECT --to-port 8080
+iptables -A PREROUTING -t nat -i $net_if -p udp --dport 53 -j REDIRECT --to-port 5353
+DEBIAN_FRONTEND=noninteractive apt install -y podman iptables-persistent
+iptables-save > /etc/iptables/rules.v4
 
 cd "$app_dir"
 chown -R "${app_user}:${app_user}" .
