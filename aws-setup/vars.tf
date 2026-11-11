@@ -11,16 +11,16 @@ variable "allowed_clients" {
 }
 
 variable "domains_limited_to" {
-  type = string
+  type = list(string)
   description = "If set, only this list of domains (comma/space separated) will be redirected through the proxy."
-  default = ""
+  default = []
 }
 
 # NOTE: ignored if `domains_limited_to` is set
 variable "domains_except_for" {
-  type = string
+  type = list(string)
   description = "Domains (comma/space separated) which will NOT be redirected to the proxy."
-  default = ""
+  default = []
 }
 
 data "local_file" "ssh_key" {

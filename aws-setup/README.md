@@ -15,9 +15,9 @@ terraform init
 aws configure sso --profile default
 
 cat << EOF > terraform.tfvars
-domains_limited_to = ""
-domains_except_for = ""
 allowed_clients = ["$(curl ipcalf.com)/32"]
+#domains_limited_to = []
+#domains_except_for = []
 EOF
 
 terraform apply

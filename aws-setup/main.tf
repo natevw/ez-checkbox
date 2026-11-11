@@ -50,8 +50,8 @@ resource "aws_instance" "proxy_server" {
         dns_script = "tmp1"
         compose_file = "tmp2"
         public_ip = self.public_ip
-        domains_limited_to = var.domains_limited_to
-        domains_except_for = var.domains_except_for
+        domains_limited_to = join(" ", var.domains_limited_to)
+        domains_except_for = join(" ", var.domains_except_for)
       }} ${k}=\"${v}\" %{endfor} sudo -E ./tmp-script",
       "rm tmp-script",
     ]
