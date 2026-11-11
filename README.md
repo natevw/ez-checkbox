@@ -19,6 +19,7 @@ TODO:
 - [x] make sure only known client [no open DNS resolver!!]
 - [x] ~~cloud-init~~provisioners for kickoff
 - [ ] privileged 53/80/443 port mapping
+- [ ] avoid client 10.89.0.2 address
 
 
 Refs:
