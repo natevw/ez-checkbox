@@ -20,14 +20,6 @@ resource "aws_vpc_security_group_ingress_rule" "sysadmin_ssh" {
   ip_protocol = "tcp"
 }
 
-resource "aws_vpc_security_group_ingress_rule" "sysadmin_ping" {
-  security_group_id = aws_security_group.sysadmin.id
-  referenced_security_group_id = aws_security_group.sysadmin.id
-  from_port = 8
-  to_port = 0
-  ip_protocol = "icmp"
-}
-
 resource "aws_security_group" "nameserver_usage" {
   name = "${ var.deploy_prefix }nameserver_usage"
   description = "Rules for gateway service itself"
