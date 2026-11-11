@@ -20,4 +20,9 @@ allowed_clients = ["$(curl ipcalf.com)/32"]
 EOF
 
 terraform apply
+
+
+PROXY_BOX=$(terraform output -raw host_ip)
+host -p 5353 ipcalf.com $PROXY_BOX
+curl ${PROXY_BOX}:8080
 ```
