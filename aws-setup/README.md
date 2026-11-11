@@ -10,8 +10,6 @@ You'll need:
 And then:
 
 ```
-terraform init
-
 aws configure sso --profile default
 
 cat << EOF > terraform.tfvars
@@ -19,7 +17,7 @@ allowed_clients = ["$(curl ipcalf.com)/32"]
 #domains_limited_to = []
 #domains_except_for = []
 EOF
-
+terraform init
 terraform apply
 
 
