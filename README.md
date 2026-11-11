@@ -17,11 +17,13 @@ TODO:
 
 - [x] terraform an AWS instance
 - [x] make sure only known client [no open DNS resolver!!]
-- [ ] cloud-init for kickoff
+- [x] ~~cloud-init~~provisioners for kickoff
+- [ ] privileged 53/80/443 port mapping
 
 
 Refs:
 
+* https://oneuptime.com/blog/post/2026-03-18-bind-privileged-ports-rootless-podman/view#method-3-use-port-forwarding-with-iptables
 * https://github.com/hashicorp-education/learn-terraform-provisioning/tree/cloudinit
   * via https://developer.hashicorp.com/terraform/tutorials/provision/cloud-init
 * https://www.sammeechward.com/cloud-init-and-terraform-with-aws#code
