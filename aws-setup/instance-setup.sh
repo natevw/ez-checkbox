@@ -4,9 +4,10 @@
 : ${app_dir:=/srv/proxy}
 : ${dns_script:?}
 : ${compose_file:?}
-: ${upstream_host:?}
+
 : ${public_ip:?}
-: ${webui_pwd:=4}
+: ${domains_limited_to:=}
+: ${domains_except_for:=}
 
 apt update
 
@@ -20,10 +21,10 @@ export PODMAN_COMPOSE_WARNING_LOGS=false
 mkdir -p "$app_dir" "${app_dir}/data"
 mv "$dns_script" "${app_dir}/data/custom-dns.py"
 mv "$compose_file" "${app_dir}/compose.yml"
-cat << EOF > "${app_dir}/.env"
-tgtDomain=${upstream_host}
-proxyIp=${public_ip}
-webuiPw=${webui_pwd}
+cat << EOF > "${app_dir}/proxy.env"
+DNS_REDIR_DEST=${public_ip}
+DNS_REDIR_DOMAINS=${domains_limited_to}
+DNS_PASSTHROUGH_DOMAINS=${domains_except_for}
 EOF
 
 cd "$app_dir"

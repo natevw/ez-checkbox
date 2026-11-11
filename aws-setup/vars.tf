@@ -10,11 +10,18 @@ variable "allowed_clients" {
   default = ["0.0.0.0/32"]
 }
 
-variable "upstream_host" {
+variable "domains_limited_to" {
   type = string
-  description = "Host which clients will connect to through us"
+  description = "If set, only this list of domains (comma/space separated) will be redirected through the proxy."
+  default = ""
 }
 
+# NOTE: ignored if `domains_limited_to` is set
+variable "domains_except_for" {
+  type = string
+  description = "Domains (comma/space separated) which will NOT be redirected to the proxy."
+  default = ""
+}
 
 data "local_file" "ssh_key" {
   filename = "bootstrap-key.pub"

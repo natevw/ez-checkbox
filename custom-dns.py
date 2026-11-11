@@ -6,20 +6,40 @@ from mitmproxy import dns
 import logging
 import os
 
-target_domains = os.getenv("MITM_DOMAIN", "ipcalf.com").split(",")
-fake_ipv4_dest = os.getenv("MITM_TARGET", "127.0.0.1")
+def _spl(s):
+    """Splits a string into a list based on comma/whitespace"""
+    # NOTE: splitting on `None` (whitespace) is special:
+    # automatically removes empty parts from the result!
+    return s.replace(',', ' ').split()
 
-logging.info(f"Custom DNS script configured to send {" and ".join(target_domains)} to {fake_ipv4_dest}")
+redir_dest = os.getenv("DNS_REDIR_DEST", "127.0.0.1")
+target_domains = _spl(os.getenv("DNS_REDIR_DOMAINS", ""))
+nontarget_domains = _spl(os.getenv("DNS_PASSTHROUGH_DOMAINS", ""))
+
+if len(target_domains):
+    logging.info(f"Custom DNS script configured to redirect {" and ".join(target_domains)} to {redir_dest}")
+elif len(nontarget_domains):
+    logging.info(f"Custom DNS script configured to redirect everything EXCEPT {" and ".join(target_domains)} to {redir_dest}")
+else:
+    logging.info(f"Custom DNS script configured to redirect EVERYTHING to {redir_dest}")
 
 def dns_request(flow: dns.DNSFlow) -> None:
     q = flow.request.question
-    if q.name in target_domains:
+    
+    if len(target_domains):
+        should_redirect = q.name in target_domains
+    elif len(nontarget_domains):
+        should_redirect = q.name not in nontarget_domains
+    else:
+        should_redirect = True
+    
+    if should_redirect:
         if q.type == dns.types.A:
             logging.info(f"Spoofing A record for {q.name}")
             flow.response = flow.request.succeed([
                 dns.ResourceRecord.A(
                     name=q.name,
-                    ip=ip_address(fake_ipv4_dest),
+                    ip=ip_address(redir_dest),
                 )
             ])
         elif q.type == dns.types.AAAA:

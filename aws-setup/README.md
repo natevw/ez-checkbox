@@ -15,7 +15,8 @@ terraform init
 aws configure sso --profile default
 
 cat << EOF > terraform.tfvars
-upstream_host = "ipcalf.com"
+domains_limited_to = ""
+domains_except_for = ""
 allowed_clients = ["$(curl ipcalf.com)/32"]
 EOF
 
