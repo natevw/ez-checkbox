@@ -27,4 +27,5 @@ webuiPw=${webui_pwd}
 EOF
 
 cd "$app_dir"
+chown -R "${app_user}:${app_user}" .
 sudo -u "$app_user" podman compose up -d
