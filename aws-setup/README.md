@@ -29,6 +29,7 @@ curl -H "Host: ${SAMPLE_HOST}" $PROXY_BOX
 curl -v --connect-to "::${PROXY_BOX}" -k "https://${SAMPLE_HOST}"
 #curl --dns-servers $PROXY_BOX -k "https://${SAMPLE_HOST}"
 
+ssh admin@${PROXY_BOX}
 ssh -nNL 8081:localhost:8081 admin@${PROXY_BOX}
 open "http://localhost:8081/?token=4"
 ```
