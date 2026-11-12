@@ -56,6 +56,13 @@ resource "aws_instance" "proxy_server" {
       "rm tmp-script",
     ]
   }
+  # WORKAROUND: starting up from the main sudo setup causes weird cgroup/networking troubles
+  provisioner "remote-exec" {
+    inline = [
+      "systemctl --user start dbus",  # HT: https://github.com/podman-container-tools/podman/issues/12983#issuecomment-1320376753
+      "cd /srv/proxy && PODMAN_COMPOSE_WARNING_LOGS=false podman compose up -d",
+    ]
+  }
 }
 
 output "ssh_user" {
