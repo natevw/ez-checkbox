@@ -14,7 +14,7 @@ apt update
 
 # Debian ~discontinued their `mitmproxy` package;
 # it's ± easiest to use official container image.
-apt install -y podman podman-compose
+apt install -y podman podman-compose systemd-container
 
 mkdir -p "$app_dir" "${app_dir}/data"
 mv "$dns_script" "${app_dir}/data/custom-dns.py"
@@ -37,9 +37,12 @@ iptables-save > /etc/iptables/rules.v4
 cd "$app_dir"
 chown -R "${app_user}:${app_user}" .
 loginctl enable-linger "$app_user"
-# HT: https://unix.stackexchange.com/questions/795036/in-podman-how-to-disable-executing-external-compose-provider-message-when-usi#comment1527343_795038
 # HT: https://github.com/podman-container-tools/podman/issues/12983#issuecomment-1320376753
 # HT: https://unix.stackexchange.com/questions/346841/why-does-sudo-i-not-set-xdg-runtime-dir-for-the-target-user
 #machinectl shell admin@.host /usr/bin/podman ps
 #systemd-run --user --machine=admin@.host --pipe podman ps
-systemd-run --pipe --uid=$app_user --same-dir -E PODMAN_COMPOSE_WARNING_LOGS=false podman compose up -d
+machinectl shell -q admin@.host /usr/bin/systemctl --user start dbus
+# HT: https://unix.stackexchange.com/questions/795036/in-podman-how-to-disable-executing-external-compose-provider-message-when-usi#comment1527343_795038
+# (for some reason cannot use `--pipe` here, as this particular command hangs despite the normal `-d/--detach` request…)
+# (maybe https://stackoverflow.com/questions/44358723/systemd-unit-file-never-finishes-when-using-a-shell-command-with-pipes#comment75797892_44358723)
+systemd-run --user --machine=admin@.host --same-dir -E PODMAN_COMPOSE_WARNING_LOGS=false podman compose up -d
