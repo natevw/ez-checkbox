@@ -3,7 +3,8 @@ services:
   proxy:
     image: docker.io/mitmproxy/mitmproxy
     restart: unless-stopped
-    network_mode: pasta  # HT: https://stackoverflow.com/a/80009191/179583
+    # NOTE: `pasta` seems to break port forwarding completely at least on v5.4.2
+    #network_mode: pasta  # HT: https://stackoverflow.com/a/80009191/179583
     ports:
       - "5353:5353/udp"
       - "8080:8080/tcp"
