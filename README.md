@@ -4,12 +4,36 @@ Easy way to spin up a "box" to check client behavior.
 
 ## How it works
 
-Provides a recursive DNS resolver which will redirect certain domains
-to a TLS proxy running on itself.
+Provides a recursive DNS resolver which will redirect all (or only certain…) domains
+to [an HTTP/HTTPS proxy](https://www.mitmproxy.org/) running on itself.
 
 The client will need to trust this proxy's self-signed cert,
 whether by custom pre-configuration or by its own insecure logic.
 
+(This is ± just a deployment process around `mitmproxy`, though it does provide a custom DNS plugin.)
+
+## How to use it
+
+Primary means is to Terraform a public server on AWS via the `aws-setup` subfolder here.
+See its README for additional notes.
+
+Otherwise you can host it directly using docker/podman/container, something like:
+
+```
+cat <<EOF > proxy.env
+DNS_REDIR_DEST=192.168.0.42    # your server's IP address here
+
+# one or none of:
+DNS_REDIR_DOMAINS=
+DNS_PASSTHROUGH_DOMAINS=
+EOF
+
+podman compose up
+```
+
+Otherwise you can use the `custom-dns.py` plugin here in conjunction with the sample invocation inside the `compose.yml` file as a starting point….
+
+Once that's done point the DNS server on the device under test to the same `$DNS_REDIR_DEST` as configured (or `public_ip` output by the Terraform setup…).
 
 ---
 
@@ -20,6 +44,7 @@ TODO:
 - [x] ~~cloud-init~~provisioners for kickoff
 - [x] privileged 53/80/443 port mapping
 - [ ] avoid client 10.89.0.2 address
+- [ ] dhcp server to auto-DNS??
 
 
 Refs:
