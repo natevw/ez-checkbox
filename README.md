@@ -33,7 +33,7 @@ podman compose up
 
 Otherwise you can use the `custom-dns.py` plugin here in conjunction with the sample invocation inside the `compose.yml` file as a starting point….
 
-Once that's done point the DNS server on the device under test to the same `$DNS_REDIR_DEST` as configured (or `public_ip` output by the Terraform setup…).
+Once that's done point the DNS server on the device under test to the same `$DNS_REDIR_DEST` as configured (or `host_ip` output by the Terraform setup…).
 
 ---
 
