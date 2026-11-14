@@ -19,6 +19,8 @@ services:
       --web-host 0.0.0.0
       --web-port 8081
       --set web_password=4
+      --set tls_version_client_min=TLS1
+      --emudhra-old
       -s /home/mitmproxy/.mitmproxy/custom-dns.py
       --mode regular@8080
       --mode dns@5353
